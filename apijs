@@ -1,0 +1,18 @@
+const PROJECT_ID = "tlrsjs7a";
+const DATASET = "production";
+
+// Sanity'den veri çekme fonksiyonu
+async function getSanityData(query) {
+    const url = `https://${PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${DATASET}?query=${encodeURIComponent(query)}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.result;
+}
+
+// Sanity resim linklerini okunabilir URL'e çevirme
+function urlFor(source) {
+    if (!source?.asset?._ref) return "https://via.placeholder.com/400x600";
+    const ref = source.asset._ref;
+    const [_file, id, dimensions, extension] = ref.split("-");
+    return `https://cdn.sanity.io/images/${PROJECT_ID}/${DATASET}/${id}-${dimensions}.${extension}`;
+}

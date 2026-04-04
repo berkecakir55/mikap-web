@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <link rel="icon" type="image/png" href="logo.jpeg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mikap Tiyatro | Sahne Sizin</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#b30000">
+
+<script>
+  if ('service worker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+</script>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+    <img src="logo.png" alt="Mikap Tiyatro Logo" class="nav-logo">
+    <span class="m-logo">Mİ</span>KAP <span>TİYATRO</span>
+</div>
+            <ul class="nav-links">
+                <li><a href="#">Anasayfa</a></li>
+                <li><a href="#oyunlar">Oyunlar</a></li>
+                <li><a href="takvim.html">Takvim</a></li>
+                <li><a href="ekip.html">Ekibimiz</a></li>
+               
+                <li><a href="iletisim.html">İletişim</a></li>
+            </ul>
+            <a href="#" class="btn-ticket-red">Hemen Bilet Al</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+    <div class="hero-slider">
+        <div class="slide active" style="background-image: url('afis3.JPEG');"></div>
+        <div class="slide" style="background-image: url('afis1.JPEG');"></div>
+        <div class="slide" style="background-image: url('afis2.JPEG');"></div>
+        <div class="slide" style="background-image: url('afis4.JPEG');"></div>
+        <div class="slide" style="background-image: url('afis5.JPEG');"></div>
+        
+        <div class="slider-overlay"></div>
+    </div>
+
+    <div class="hero-content">
+        <h4>Perde Sizin İçin Açılıyor</h4>
+        <h1>MİKAP TİYATRO YENİ SEZON</h1>
+        <p>Atakum'un kalbinde, sanatın en saf haliyle buluşun.</p>
+        <div class="hero-btns">
+            <a href="#oyunlar" class="btn-yellow">Oyunları İncele</a>
+            <a href="https://www.youtube.com/watch?v=..." target="_blank" class="btn-outline">Tanıtımı İzle</a>
+        </div>
+    </div>
+</section>
+
+    <section id="oyunlar" class="plays-section">
+        <h2>Sahnedeki Oyunlarımız</h2>
+        <div class="plays-container">
+            <div class="play-card">
+                <img src="sonsaat.png" alt="Oyun Afişi">
+                <div class="play-info">
+                    <h3>Son Saat</h3>
+                    <a href="https://biletinial.com/tr-tr/tiyatro/son-saat" target="_blank" class="btn-buy">Bilet Al</a>
+                </div>
+            </div>
+            <div class="play-card">
+                <img src="gobekliler.png" alt="Oyun Afişi">
+                <div class="play-info">
+                    <h3>Göbekliler</h3>
+                    <a href="https://biletinial.com/en-tr/tiyatro/gobekliler-tiyatro-oyunu" class="btn-buy">Bilet Al</a>
+                </div>
+            </div>
+             <div class="play-card">
+                <img src="veperde.jpeg" alt="Oyun Afişi">
+                <div class="play-info">
+                    <h3>Ve Perde</h3>
+                    <a href="#" class="btn-buy">Bilet Al</a>
+                </div>
+            </div>
+            </div>
+    </section>
+<footer class="main-footer">
+    <div class="footer-content">
+        <h2 class="footer-logo">MİKAP TİYATRO</h2>
+        <p class="footer-location">Atakum, Samsun</p>
+        <p class="footer-contact">Gişe: 0541 140 5517</p>
+        
+        <div class="social-icons">
+            <a href="https://instagram.com/mikaptiyatro"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.youtube.com/channel/UChvmHVL0fiUs_D_U11OLJiw"><i class="fab fa-youtube"></i></a>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Mikap Tiyatro. Tüm Hakları Saklıdır.</p>
+        </div>
+    </div>
+</footer>
+<script>
+    // Slider motorunu başlatalım
+    const slides = document.querySelectorAll('.hero-slider .slide');
+    let currentSlideIndex = 0;
+    const slideIntervalTime = 5000; // Her 5 saniyede bir değişim
+
+    function changeSlide() {
+        // 1. Mevcut resmi sahneden çek (active sınıfını kaldır)
+        slides[currentSlideIndex].classList.remove('active');
+        
+        // 2. Bir sonraki resmin sırasını belirle
+        currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+        
+        // 3. Yeni resmi sahneye al (active sınıfını ekle)
+        slides[currentSlideIndex].classList.add('active');
+    }
+
+    // Zamanlayıcıyı kur
+    if (slides.length > 0) {
+        setInterval(changeSlide, slideIntervalTime);
+    }
+</script>
+</body>
+</html>

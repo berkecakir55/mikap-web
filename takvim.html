@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <link rel="icon" type="image/png" href="logo.jpeg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oyun Takvimi | Mikap Tiyatro</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#b30000">
+
+<script>
+  if ('service worker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+</script>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+    <img src="logo.png" alt="Mikap Tiyatro Logo" class="nav-logo">
+    <span class="m-logo">Mİ</span>KAP <span>TİYATRO</span>
+</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Anasayfa</a></li>
+                <li><a href="index.html#oyunlar">Oyunlar</a></li>
+                <li><a href="takvim.html" class="active-link">Takvim</a></li>
+                <li><a href="ekip.html">Ekibimiz</a></li>
+                
+                <li><a href="iletisim.html">İletişim</a></li>
+            </ul>
+            <a href="#" class="btn-ticket-red">Hemen Bilet Al</a>
+        </nav>
+    </header>
+
+    <section class="page-header">
+        <div class="header-overlay">
+            <h1>Oyun Takvimi</h1>
+            <p>Nisan 2026 Programı</p>
+            <div id="live-clock-panel" class="live-clock">
+    <div id="current-time">00:00:00</div>
+    <div id="current-date">Yükleniyor...</div>
+</div>
+        </div>
+    </section>
+
+    <section class="calendar-section">
+        <div class="calendar-container">
+            
+            <div class="calendar-item">
+                <div class="event-date">
+                    <span class="day">-</span>
+                    <span class="month">--</span>
+                </div>
+                <div class="event-details">
+                    <h3>Göbekliler</h3>
+                    <p><i class="fas fa-clock"></i> 20:00 | <i class="fas fa-map-marker-alt"></i> Atakum Sanat Merkezi</p>
+                </div>
+                <div class="event-action">
+                    <a href="https://biletinial.com/en-tr/tiyatro/gobekliler-tiyatro-oyunu" class="btn-buy-small">Bilet Al</a>
+                </div>
+            </div>
+
+            <div class="calendar-item">
+                <div class="event-date">
+                    <span class="day">-</span>
+                    <span class="month">--</span>
+                </div>
+                <div class="event-details">
+                    <h3>Son Saat</h3>
+                    <p><i class="fas fa-clock"></i> 20:00 | <i class="fas fa-map-marker-alt"></i> Atakum Sanat Merkezi</p>
+                </div>
+                <div class="event-action">
+                    <a href="https://biletinial.com/tr-tr/tiyatro/son-saat" class="btn-buy-small">Bilet Al</a>
+                </div>
+            </div>
+
+            <div class="calendar-item">
+                <div class="event-date">
+                    <span class="day">-</span>
+                    <span class="month">--</span>
+                </div>
+                <div class="event-details">
+                    <h3>Ve Perde</h3>
+                    <p><i class="fas fa-clock"></i> 20:00 | <i class="fas fa-map-marker-alt"></i> Atakum Sanat Merkezi</p>
+                </div>
+                <div class="event-action">
+                    <span class="sold-out">Hazırlık</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <h2 class="footer-logo">MİKAP TİYATRO</h2>
+            <p class="footer-location">Atakum, Samsun</p>
+            <p class="footer-contact">Gişe: 0541 140 5517</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Mikap Tiyatro. Tüm Hakları Saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+<script>
+    function updateClock() {
+        const now = new Date();
+        
+        // Saati formatla (HH:mm:ss)
+        const timeString = now.toLocaleTimeString('tr-TR', { 
+            hour12: false, 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+        });
+        
+        // Tarihi formatla (Gün Ay Yıl)
+        const dateString = now.toLocaleDateString('tr-TR', { 
+            day: 'numeric', 
+            month: 'long', 
+            year: 'numeric' 
+        });
+
+        document.getElementById('current-time').textContent = timeString;
+        document.getElementById('current-date').textContent = dateString;
+    }
+
+    // Her saniye güncelle
+    setInterval(updateClock, 1000);
+    // Sayfa açılır açılmaz çalıştır
+    updateClock();
+</script>
+</body>
+</html>

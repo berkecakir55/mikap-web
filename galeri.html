@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri | Mikap Tiyatro</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo"><span class="m-logo">Mİ</span>KAP <span>TİYATRO</span></div>
+            <ul class="nav-links">
+                <li><a href="index.html">Anasayfa</a></li>
+                <li><a href="index.html#oyunlar">Oyunlar</a></li>
+                <li><a href="takvim.html">Takvim</a></li>
+                <li><a href="ekip.html">Ekibimiz</a></li>
+                <li><a href="galeri.html" class="active-link">Galeri</a></li>
+                <li><a href="iletisim.html">İletişim</a></li>
+            </ul>
+            <a href="#" class="btn-ticket-red">Hemen Bilet Al</a>
+        </nav>
+    </header>
+
+    <section class="page-header gallery-header">
+        <div class="header-overlay">
+            <h1>Sahnemizden Kareler</h1>
+            <p>Anları Ölümsüzleştiriyoruz</p>
+        </div>
+    </section>
+
+    <section class="gallery-section">
+        <div class="filter-wrapper">
+            <button class="filter-btn active" data-filter="all">Tümü</button>
+            <button class="filter-btn" data-filter="hamlet">Hamlet</button>
+            <button class="filter-btn" data-filter="lukus">Lüküs Hayat</button>
+            <button class="filter-btn" data-filter="cimri">Cimri</button>
+        </div>
+
+        <div class="gallery-grid" id="gallery-grid">
+    <div class="gallery-item hamlet" onclick="openLightbox(0)">
+        <img src="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&w=800" alt="Hamlet">
+    </div>
+    <div class="gallery-item hamlet" onclick="openLightbox(1)">
+        <img src="https://images.unsplash.com/photo-1533488765986-dfa2a9939acd?q=80&w=800" alt="Hamlet">
+    </div>
+    <div class="gallery-item lukus" onclick="openLightbox(2)">
+        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=800" alt="Lüküs Hayat">
+    </div>
+    </div>
+
+<div id="lightbox" class="lightbox">
+    <span class="close-btn" onclick="closeLightbox()">&times;</span>
+    <button class="nav-btn prev" onclick="changeImage(-1)">&#10094;</button>
+    <div class="lightbox-content">
+        <img id="lightbox-img" src="" alt="">
+    </div>
+    <button class="nav-btn next" onclick="changeImage(1)">&#10095;</button>
+</div>
+<footer class="main-footer">
+    <div class="footer-content">
+        <h2 class="footer-logo">MİKAP TİYATRO</h2>
+        <p class="footer-location">Atakum, Samsun</p>
+        <p class="footer-contact">Gişe: 0541 140 5517</p>
+        
+        <div class="social-icons">
+            <a href="https://www.instagram.com/mikaptiyatro/"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.youtube.com/channel/UChvmHVL0fiUs_D_U11OLJiw"><i class="fab fa-youtube"></i></a>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Mikap Tiyatro. Tüm Hakları Saklıdır.</p>
+        </div>
+    </div>
+</footer>
+<script>
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    
+    let currentVisibleItems = []; // O an ekranda olan resimlerin listesi
+    let currentIndex = 0; // Lightbox'ta açık olan resmin sırası
+
+    // --- FİLTRELEME MANTIĞI ---
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filterValue = btn.getAttribute('data-filter');
+
+            galleryItems.forEach(item => {
+                if (filterValue === 'all' || item.classList.contains(filterValue)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // --- LIGHTBOX (BÜYÜTME) MANTIĞI ---
+    function openLightbox(index) {
+        // Sadece o an görünür olan (filtrelenmiş) resimleri listeye al
+        currentVisibleItems = Array.from(galleryItems).filter(item => item.style.display !== 'none');
+        
+        // Tıklanan resmin bu yeni listedeki sırasını bul
+        const clickedItem = galleryItems[index];
+        currentIndex = currentVisibleItems.indexOf(clickedItem);
+
+        updateLightboxImage();
+        lightbox.style.display = 'flex';
+    }
+
+    function closeLightbox() {
+        lightbox.style.display = 'none';
+    }
+
+    function changeImage(direction) {
+        currentIndex += direction;
+
+        // Başa veya sona gelince döngüye girsin
+        if (currentIndex >= currentVisibleItems.length) currentIndex = 0;
+        if (currentIndex < 0) currentIndex = currentVisibleItems.length - 1;
+
+        updateLightboxImage();
+    }
+
+    function updateLightboxImage() {
+        const imgTag = currentVisibleItems[currentIndex].querySelector('img');
+        lightboxImg.src = imgTag.src;
+    }
+
+    // --- KLAVYE DESTEĞİ ---
+    document.addEventListener('keydown', (e) => {
+        if (lightbox.style.display === 'flex') {
+            if (e.key === "ArrowRight") changeImage(1);
+            if (e.key === "ArrowLeft") changeImage(-1);
+            if (e.key === "Escape") closeLightbox();
+        }
+    });
+
+    // Lightbox dışına tıklayınca kapatma
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+    });
+</script>
+</body>
+</html>

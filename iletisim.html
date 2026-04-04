@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <link rel="icon" type="image/png" href="logo.jpeg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İletişim | Mikap Tiyatro</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#b30000">
+
+<script>
+  if ('service worker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+</script>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+    <img src="logo.png" alt="Mikap Tiyatro Logo" class="nav-logo">
+    <span class="m-logo">Mİ</span>KAP <span>TİYATRO</span>
+</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Anasayfa</a></li>
+                <li><a href="index.html#oyunlar">Oyunlar</a></li>
+                <li><a href="takvim.html">Takvim</a></li>
+                <li><a href="ekip.html">Ekibimiz</a></li>
+                
+                <li><a href="iletisim.html" class="active-link">İletişim</a></li>
+            </ul>
+            <a href="#" class="btn-ticket-red">Hemen Bilet Al</a>
+        </nav>
+    </header>
+
+    <section class="contact-main">
+        <div class="contact-header">
+            <h1>Bize Ulaşın</h1>
+            <p>Oyunlarımız, iş birlikleri veya biletler hakkında her türlü sorunuz için buradayız.</p>
+        </div>
+
+        <div class="contact-container">
+            <div class="contact-form-card">
+                <h2>Mesaj Gönder</h2>
+                <form id="my-form" action="https://formspree.io/f/xdappgrb" method="POST">
+    <div class="form-group">
+        <label>Adınız Soyadınız</label>
+        <input type="text" name="ad_soyad" placeholder="Örn: Metin Taha Kaya" required>
+    </div>
+    <div class="form-group">
+        <label>E-Posta Adresiniz</label>
+        <input type="email" name="email" placeholder="iletisim@mikaptiyatro.com" required>
+    </div>
+    <div class="form-group">
+        <label>Konu</label>
+        <input type="text" name="konu" placeholder="Oyun Bilgisi, İş Birliği vb.">
+    </div>
+    <div class="form-group">
+        <label>Mesajınız</label>
+        <textarea name="mesaj" rows="5" placeholder="Mesajınızı buraya yazın..." required></textarea>
+    </div>
+    <button type="submit" id="my-form-button" class="btn-send">Mesaj Gönder</button>
+    <p id="my-form-status" style="margin-top: 15px; font-size: 14px; text-align: center;"></p>
+</form>
+            </div>
+
+            <div class="contact-info-panel">
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <h3>Adres</h3>
+                        <p>Körfez, 5102. Sk. 12/A, 55030 Atakum/Samsun</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <div>
+                        <h3>Telefon</h3>
+                        <p>+90 (541) 140 55 17</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <h3>E-posta</h3>
+                        <p>mikapsanat@gmail.com</p>
+                    </div>
+                </div>
+
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47916.88729969929!2d36.18741989135741!3d41.356582088798504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x408877001cca077f%3A0x271daf7415b7af11!2sMikap%20Tiyatro!5e0!3m2!1str!2str!4v1775334166799!5m2!1str!2str" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" 
+                        width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        </footer>
+
+        <script>
+  var form = document.getElementById("my-form");
+  
+  async function handleSubmit(event) {
+    event.preventDefault();
+    var status = document.getElementById("my-form-status");
+    var data = new FormData(event.target);
+    
+    // Gönderim başladığında butonu pasif yapalım
+    const btn = document.getElementById("my-form-button");
+    btn.disabled = true;
+    btn.innerText = "Gönderiliyor...";
+
+    fetch(event.target.action, {
+      method: form.method,
+      body: data,
+      headers: {
+          'Accept': 'application/json'
+      }
+    }).then(response => {
+      if (response.ok) {
+        status.innerHTML = "Teşekkürler! Mesajınız başarıyla iletildi.";
+        status.style.color = "#f1c40f"; // Altın sarısı
+        form.reset();
+        btn.innerText = "Mesaj Gönder";
+        btn.disabled = false;
+      } else {
+        response.json().then(data => {
+          if (Object.hasOwn(data, 'errors')) {
+            status.innerHTML = data["errors"].map(error => error["message"]).join(", ");
+          } else {
+            status.innerHTML = "Hay aksi! Bir sorun oluştu.";
+          }
+          status.style.color = "#ff1e56"; // Pembe/Kırmızı
+        })
+      }
+    }).catch(error => {
+      status.innerHTML = "Hata! İnternet bağlantınızı kontrol edin.";
+      status.style.color = "#ff1e56";
+    });
+  }
+  
+  form.addEventListener("submit", handleSubmit)
+</script>
+</body>
+</html>
