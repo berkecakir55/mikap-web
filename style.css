@@ -819,3 +819,98 @@ body {
     }
 }
 
+/* --- MOBİL İÇİN KATMANLI GÖRÜNÜM (MAX 768PX) --- */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column; /* Logo üstte, menü altta olsun */
+        padding: 10px;
+        gap: 10px;
+        height: auto;
+    }
+
+    .nav-links {
+        display: flex;
+        flex-wrap: wrap; /* Sığmayan linkleri (İletişim gibi) alt satıra atar */
+        justify-content: center;
+        gap: 10px;
+        padding: 0;
+        width: 100%;
+    }
+
+    .nav-links li {
+        margin: 0;
+    }
+
+    .nav-links a {
+        font-size: 13px; /* Linkleri biraz küçülterek sığmalarını kolaylaştırdık */
+    }
+
+    /* Hemen Bilet Al Butonu */
+    .btn-ticket.red {
+        width: 90%; /* Mobilde geniş ve basması kolay */
+        text-align: center;
+        padding: 12px 0;
+        margin: 0 auto;
+        font-size: 16px;
+    }
+
+    /* Önceki hamburger menü ikonunu gizleyelim (artık ihtiyacımız yok) */
+    .menu-toggle {
+        display: none !important;
+    }
+}
+
+/* --- MOBİL TAMİR KİTİ (MAX 768PX) --- */
+@media (max-width: 768px) {
+    
+    /* 1. NAVBAR VE MENÜ TAMİRİ */
+    .navbar {
+        flex-direction: column; /* Logo üstte, menü altta olsun */
+        padding: 10px;
+        gap: 10px;
+        height: auto;
+    }
+
+    .nav-links {
+        display: flex;
+        flex-wrap: wrap; /* Sığmayan linkleri (İletişim gibi) alt satıra atar */
+        justify-content: center;
+        gap: 10px;
+        padding: 0;
+        width: 100%;
+    }
+
+    .nav-links a {
+        font-size: 13px; /* Linkleri biraz küçülterek sığmalarını kolaylaştırdık */
+    }
+
+    /* 2. İLETİŞİM SAYFASI TAŞMA TAMİRİ */
+    .contact-main {
+        padding: 80px 15px 40px; /* Yanlardaki %8'lik boşluğu %15px'e düşürdük */
+    }
+
+    .contact-container {
+        /* Videodaki o iki sütunlu yapıyı TEK SÜTUNA düşürüyoruz */
+        grid-template-columns: 1fr !important; 
+        gap: 30px;
+        width: 100%;
+    }
+
+    .contact-form-card {
+        padding: 20px; /* İç boşluğu daralttık */
+        width: 100%;
+        margin: 0;
+    }
+
+    /* Input ve butonların kutudan taşmasını engelleyelim */
+    input, textarea, .btn-submit {
+        width: 100% !important;
+        max-width: 100%;
+        box-sizing: border-box; /* Önemli: Padding'i genişliğe dahil eder */
+    }
+
+    .contact-header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+}
