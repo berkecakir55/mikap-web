@@ -41,7 +41,7 @@ body {
     object-fit: contain;
 }
 
-.logo span { color: #e91e63; } /* Kırmızı vurgu */
+.logo span { color: #ffffff; } /* Kırmızı vurgu */
 
 .nav-links {
     display: flex;
@@ -913,4 +913,432 @@ body {
         font-size: 1.8rem;
         margin-bottom: 20px;
     }
+}
+
+/* --- MİSYON VİZYON ÖZEL STİLLER --- */
+.mv-hero {
+    height: 40vh;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('afis1.jpg'); /* Arka plana şık bir oyun görseli koyabilirsin */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 80px;
+}
+
+.mv-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: #f1c40f; /* Altın sarısı tonu */
+    margin-bottom: 10px;
+}
+
+.mv-section {
+    padding: 80px 8%;
+    background: #000;
+}
+
+.mv-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.mv-card {
+    background: #111;
+    padding: 40px;
+    border-radius: 15px;
+    border: 1px solid #222;
+    transition: transform 0.3s ease;
+}
+
+.mv-card:hover {
+    transform: translateY(-10px);
+    border-color: #b30000; /* Kırmızı vurgu */
+}
+
+.mv-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.mv-card h2 {
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.mv-card p {
+    color: #ccc;
+    line-height: 1.8;
+}
+
+/* Değerlerimiz Grid */
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    border-top: 1px solid #222;
+    padding-top: 60px;
+    text-align: center;
+}
+
+.value-item h3 {
+    color: #f1c40f;
+    margin-bottom: 10px;
+}
+
+.value-item p {
+    font-size: 0.9rem;
+    color: #999;
+}
+
+/* --- MOBİL UYUMLULUK --- */
+@media (max-width: 768px) {
+    .mv-container, .values-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .mv-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .mv-section {
+        padding: 40px 15px;
+    }
+}
+/* AFİŞ TEMALI ÖZEL STİLLER */
+.poster-body {
+    background-color: #000;
+    /* Mavi ve Altın Spot Işığı Efekti */
+    background-image: 
+        radial-gradient(circle at top left, rgba(241, 196, 15, 0.15), transparent 40%),
+        radial-gradient(circle at top right, rgba(52, 152, 219, 0.15), transparent 40%);
+    color: #fff;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Üst Logo Barı */
+.poster-header {
+    border-bottom: 2px solid #f1c40f;
+    padding: 20px 0;
+    background: linear-gradient(to bottom, #111, #000);
+}
+
+.poster-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.poster-logo-img {
+    height: 60px;
+}
+
+.poster-brand h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: #fff;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.poster-brand span {
+    color: #aaa;
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+}
+
+/* Başlık ve Yazılar */
+.poster-content {
+    flex: 1;
+    padding: 50px 15px;
+}
+
+.gradient-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    background: linear-gradient(to right, #3498db, #f1c40f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 5px;
+}
+
+.underline {
+    width: 200px;
+    height: 3px;
+    background: #3498db;
+    margin: 0 auto 40px;
+}
+
+.poster-section {
+    margin-bottom: 50px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.gold-title {
+    color: #f1c40f;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    text-decoration: underline;
+    margin-bottom: 20px;
+}
+
+.gold-text {
+    color: #f1c40f;
+    font-weight: 600;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    letter-spacing: 1px;
+    text-transform: uppercase; /* Afişteki o sert duruş için */
+}
+
+/* Alt Bar */
+.poster-footer {
+    background: #000;
+    padding: 20px;
+    border-top: 1px solid #333;
+    color: #f1c40f;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.footer-link {
+    color: #f1c40f;
+    text-decoration: none;
+    border-bottom: 1px solid #f1c40f;
+}
+
+/* Mobilde yazıları biraz küçültelim */
+@media (max-width: 768px) {
+    .gradient-text { font-size: 1.8rem; }
+    .gold-text { font-size: 1.1rem; }
+    .poster-brand h1 { font-size: 1.4rem; }
+}
+
+/* OYUN DETAY SAYFASI ÖZEL STİLLERİ */
+.play-detail-section {
+    padding: 120px 8% 80px;
+    background-color: #000;
+    min-height: 80vh;
+}
+
+.detail-container {
+    display: flex;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+.detail-left {
+    flex: 1;
+    max-width: 450px;
+}
+
+.detail-poster {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid #333;
+}
+
+.detail-right {
+    flex: 1.5;
+    color: #fff;
+}
+
+.play-genre {
+    color: #f1c40f; /* Altın sarısı */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.play-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    margin: 10px 0 25px;
+}
+
+.play-meta {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+    color: #ccc;
+    font-size: 1rem;
+}
+
+.meta-item i {
+    color: #f1c40f;
+    margin-right: 8px;
+}
+
+.play-description h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+.play-description p {
+    line-height: 1.8;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+.detail-actions {
+    display: flex;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.btn-buy-large {
+    background-color: #b30000;
+    color: white;
+    padding: 15px 40px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-buy-large:hover {
+    background-color: #ff0000;
+    transform: translateY(-3px);
+}
+
+.btn-secondary {
+    border: 1px solid #fff;
+    color: white;
+    padding: 15px 40px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.btn-secondary:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* MOBİL UYUMLULUK */
+@media (max-width: 768px) {
+    .detail-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .detail-left {
+        max-width: 100%;
+    }
+
+    .play-title {
+        font-size: 2.5rem;
+    }
+
+    .play-meta {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .detail-actions {
+        flex-direction: column;
+    }
+    
+    .btn-buy-large, .btn-secondary {
+        text-align: center;
+    }
+}
+/* MİSYON VİZYON SAYFASI YENİ TASARIM */
+.mv-poster-page {
+    background-color: #000;
+    /* Hafif Mavi ve Altın Spot Efekti */
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(241, 196, 15, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(52, 152, 219, 0.08) 0%, transparent 40%);
+    min-height: 90vh;
+    padding: 140px 10% 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.mv-main-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    letter-spacing: 5px;
+    color: #fff;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #3498db, #f1c40f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.mv-line {
+    width: 150px;
+    height: 3px;
+    background: #3498db;
+    margin: 0 auto 60px;
+}
+
+.mv-content-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    max-width: 900px;
+}
+
+.mv-box {
+    border: 1px solid rgba(241, 196, 15, 0.2);
+    padding: 40px;
+    border-radius: 2px; /* Keskin köşeler daha kurumsal durur */
+    background: rgba(17, 17, 17, 0.5);
+    transition: 0.4s;
+}
+
+.mv-box:hover {
+    border-color: #f1c40f;
+    box-shadow: 0 0 20px rgba(241, 196, 15, 0.1);
+}
+
+.mv-sub-title {
+    font-family: 'Playfair Display', serif;
+    color: #f1c40f;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-decoration: underline;
+    text-underline-offset: 10px;
+}
+
+.mv-text {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: #f1c40f; /* Afişteki o sarı tonu */
+    font-weight: 500;
+    text-transform: uppercase; /* İlk tasarımındaki sert duruş */
+    letter-spacing: 1px;
+}
+
+/* MOBİL TAMİR */
+@media (max-width: 768px) {
+    .mv-poster-page { padding: 120px 20px 60px; }
+    .mv-main-title { font-size: 2rem; }
+    .mv-text { font-size: 1.1rem; }
+    .mv-box { padding: 25px; }
 }
