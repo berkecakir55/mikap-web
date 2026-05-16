@@ -61,6 +61,63 @@
     </div>
 </section>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<section class="takvim-modern-section">
+    <h2 class="takvim-baslik">Mikap Tiyatro 2026 Takvimi</h2>
+    
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <img src="images/kapak.jpeg" alt="Mikap 2026 Kapak">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/ocak.jpeg" alt="Ocak 2026">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/subat.jpeg" alt="Şubat 2026">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/mart.jpeg" alt="Mart 2026">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/nisan.jpeg" alt="Nisan 2026">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/mayis.jpeg" alt="Mayıs 2026">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/haziran.jpeg" alt="Haziran 2026">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/temmuz.jpeg" alt="Temmuz 2026">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/agustos.jpeg" alt="Ağustos 2026">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/eylul.jpeg" alt="Eylül 2026">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/ekim.jpeg" alt="Ekim 2026">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/kasim.jpeg" alt="Kasım 2026">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/aralik.jpeg" alt="Aralık 2026">
+            </div>
+            </div>
+        
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <section id="oyunlar" class="plays-section">
         <h2>Sahnedeki Oyunlarımız</h2>
         <div class="plays-container">
@@ -102,7 +159,7 @@
         
         <div class="social-icons">
             <a href="https://instagram.com/mikaptiyatro"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61563645158672&locale=tr_TR"><i class="fab fa-facebook"></i></a>
             <a href="https://www.youtube.com/channel/UChvmHVL0fiUs_D_U11OLJiw"><i class="fab fa-youtube"></i></a>
         </div>
 
@@ -133,5 +190,51 @@
         setInterval(changeSlide, slideIntervalTime);
     }
 </script>
+
+<script>
+    // 1. Hangi ayda olduğumuzu bulan küçük bir fonksiyon yazıyoruz
+    function MevcutAyiBul() {
+        var bugun = new Date();
+        var ayIndex = bugun.getMonth(); // Ocak için 0, Şubat için 1... Aralık için 11 döner.
+        
+        // Sizin HTML yapınızda:
+        // Slide 0 -> Kapak
+        // Slide 1 -> Ocak
+        // Slide 2 -> Şubat ...
+        // Bu yüzden bulduğumuz ay indeksine +1 ekleyerek doğru slide numarasını buluyoruz.
+        return ayIndex + 1; 
+    }
+
+    // 2. Swiper'ı bu ayarlarla başlatıyoruz
+    var swiper = new Swiper(".mySwiper", {
+        initialSlide: MevcutAyiBul(), // Site açıldığında otomatik olarak mevcut ayı açar
+        loop: true,                  // Kaydırma bittiğinde takılmadan otomatik BAŞA DÖNER!
+        speed: 600,                  // Sayfa geçiş hızı (ms)
+        grabCursor: true,            // Fare el simgesine dönüşsün
+        centeredSlides: true,
+        
+        // Ok tuşları ile kontrol
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        
+        // Alt noktalı gezinme
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        
+        // Klavye ok tuşları desteği
+        keyboard: {
+            enabled: true,
+            onlyInViewport: true,
+        },
+        
+        // Mobilde dokunmatik hassasiyeti
+        touchEventsTarget: 'container',
+    });
+</script>
+
 </body>
 </html>
