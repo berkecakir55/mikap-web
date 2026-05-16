@@ -1345,7 +1345,8 @@ body {
 
 .takvim-modern-section {
     background-color: #0b0b0b;
-    padding: 60px 0;
+    padding-top: 40px;    /* Üst boşluğu biraz daralttık */
+    padding-bottom: 20px; /* ALTTAKİ DEVASA BOŞLUĞU SIFIRLAMAK İÇİN BURAYI KÜÇÜLTTÜK */
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -1361,11 +1362,19 @@ body {
 /* Takvim Alanının Boyutları */
 .swiper {
     width: 90%;
-    max-width: 800px; /* Bilgisayarda maksimum genişlik */
-    height: 500px;
-    aspect-ratio: 3 / 4; /* A3 dikey oranını korumak için (Gerekirse 4/3 yapabilirsiniz) */
-    border-radius: 12px;
+    max-width: 650px;    /* Bilgisayarda ideal bir büyüklük sunar */
+    height: auto !important; /* Yüksekliğin otomatik hesaplanmasını zorunlu kılıyoruz */
+    margin-bottom: 10px; /* Swiper'ın hemen altındaki boşluk */
     box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    border-radius: 12px;
+}
+
+/* MOBİL CİHAZLAR İÇİN ÖZEL AYAR (Ekran genişliği 768px'den küçükse) */
+@media (max-width: 768px) {
+    .swiper {
+        width: 95%; /* Telefonda sağdan soldan az bir pay bıraksın */
+        max-width: 380px; /* Telefon ekranında taşma yapmayacak ideal genişlik */
+    }
 }
 
 .swiper-slide {
@@ -1377,15 +1386,8 @@ body {
 
 .swiper-slide img {
     width: 100%;
-    height: 100%;
-    object-fit: contain; /* Görseli ezmeden veya kırpmadan çerçeveye tam sığdırır */
+    height: auto !important; /* Görselin kendi dikey oranına göre kutunun şekil almasını sağlar */
+    display: block;
+    object-fit: contain;
 }
 
-/* Okların ve Noktaların Renklerini Mikap Tarzı Yapalım (Neon Yeşil/Magenta) */
-.swiper-button-next, .swiper-button-prev {
-    color: #f1c40f !important; /* Neon Yeşil oklar */
-}
-
-.swiper-pagination-bullet-active {
-    background: #f1c40f !important; /* Aktif sayfa noktası Magenta */
-}
