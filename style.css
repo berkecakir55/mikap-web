@@ -1391,3 +1391,37 @@ body {
     object-fit: contain;
 }
 
+/* Butonların genel kapsayıcısı (Alt alta hizalamak istersen) */
+.button-container {
+    display: flex;
+    flex-direction: column; /* Butonları alt alta dizer */
+    align-items: center;    /* Ortalar */
+    gap: 15px;              /* Aralarındaki boşluk */
+}
+
+/* Eğer mevcut butonlar yan yanaysa ve sadece duyurular butonunu 
+   alt satıra tek başına koymak istersen, CSS'i bozmamak için width%100 verebilirsin */
+
+/* Yeni Duyurular Butonunun Stili */
+.btn-announcement {
+    display: inline-block;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 2px solid #ffffff; /* Beyaz çerçeve */
+    border-radius: 4px;        /* Köşe ovalliği */
+    background-color: transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Üzerine gelindiğinde (Hover) Efekti */
+.btn-announcement:hover {
+    background-color: #ffffff; /* Arka plan beyaza döner */
+    color: #000000;            /* Yazı siyah olur */
+    box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.3); /* Hafif parlama */
+}
+
