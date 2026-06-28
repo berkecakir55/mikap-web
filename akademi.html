@@ -37,7 +37,6 @@
             margin-bottom: 25px;
         }
 
-        /* Form Elemanları */
         .input-group {
             margin-bottom: 20px;
             text-align: left;
@@ -75,7 +74,6 @@
 
         .btn-login:hover, .btn-save:hover { background: #ff0000; }
 
-        /* Panel Düzenleri */
         .dashboard { display: none; text-align: left; }
         .user-info {
             display: flex;
@@ -98,7 +96,6 @@
         }
         .logout-btn:hover { background: #b30000; color: #fff; }
 
-        /* Not Tablosu */
         .grades-table {
             width: 100%;
             border-collapse: collapse;
@@ -239,7 +236,7 @@
                 </div>
 
                 <h3>Akademik Durum Raporu</h3>
-                <p style="font-size: 12px; color: #888; margin-bottom: 15px;">* Bu alandaki veriler salt okunurdur, değişiklik yapılamaz.</p>
+                <p style="font-size: 12px; color: #888; margin-bottom: 15px;">* Bu alandaki veriler buluttan anlık çekilir, salt okunurdur.</p>
                 
                 <div style="overflow-x: auto;">
                     <table class="grades-table">
@@ -286,10 +283,26 @@
         </div>
     </footer>
 
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
     <script>
 // =================================================================
-// MİKAP AKADEMİ KULLANICI LİSTESİ
+// EKRAN GÖRÜNTÜNDEKİ SANA ÖZEL CANLI BULUT ANAHTARLARI ENTEGRE EDİLDİ
 // =================================================================
+const firebaseConfig = {
+    apiKey: "AIzaSyBoa1ULmRy8pfGrsxQV3jGrmHkBIWdi11w",
+    authDomain: "mikap-akademi.firebaseapp.com",
+    projectId: "mikap-akademi",
+    storageBucket: "mikap-akademi.firebasestorage.app",
+    messagingSenderId: "197387541642",
+    appId: "1:197387541642:web:c23a4c0b8b6e959ee2a173"
+};
+
+// Firebase Bağlantısını Başlat
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 const KULLANICILAR = {
     "metintahakaya": { sifre: "Mtk.Mikap2026!", rol: "teacher", isim: "Metin Taha Kaya" },
     "berkecakir": { sifre: "Mikap_Bc99!", rol: "student", isim: "Berke Çakır" },
@@ -297,10 +310,10 @@ const KULLANICILAR = {
     "ahmetgumus": { sifre: "A_Gumus2026!", rol: "student", isim: "Ahmet Gümüş" },
     "aysegulzerey": { sifre: "5373548337Az.", rol: "student", isim: "Ayşegül Zerey" },
     "cerenilgir": { sifre: "Ceren.Ilgir!55", rol: "student", isim: "Ceren Ilgır" },
-    "eylulgulcicek": { sifre: "55#EylulGulcicek", rol: "student", isim: "Eylül Gülçiçek" },
+    "eylulgulcicek": { sifre: "55#EylulGulcicek", rol: "student", isim: "Eylel Gülçiçek" },
     "furkanalialgan": { sifre: "Faa.Algan2026!", rol: "student", isim: "Furkan Ali Algan" },
     "muhammedmertkaya": { sifre: "Latissimus5!", rol: "student", isim: "Muhammed Mert Kaya" },
-    "murvetyigit": { sifre: "mur123", rol: "student", isim: "Mürvet Yiğit" },
+    "murveryigit": { sifre: "mur123", rol: "student", isim: "Mürvet" },
     "niluferguzel": { sifre: "Nilufer*Guzel99", rol: "student", isim: "Nilüfer Güzel" },
     "furkanfatihkaratas": { sifre: "Furk@n.Krt55", rol: "student", isim: "Furkan Fatih Karataş" },
     "mehmetbahadirunal": { sifre: "Mhmt+Unl55", rol: "student", isim: "Mehmet Bahadır Ünal" }
@@ -308,15 +321,6 @@ const KULLANICILAR = {
 
 let AKTIF_KULLANICI = "";
 
-// Hafıza kontrol havuzları
-if (!localStorage.getItem('mikap_notlar')) {
-    localStorage.setItem('mikap_notlar', JSON.stringify({}));
-}
-if (!localStorage.getItem('mikap_ozel_sifreler')) {
-    localStorage.setItem('mikap_ozel_sifreler', JSON.stringify({}));
-}
-
-// 70 Barajına Göre Otomatik Harf Belirleme Fonksiyonu
 function harfNotuHesapla(ort) {
     if (ort === "-" || isNaN(ort)) return "-";
     if (ort < 70) return "FF (Kaldı)";
@@ -327,68 +331,77 @@ function harfNotuHesapla(ort) {
     return "CC (Orta - Geçti)";
 }
 
-// AKILLI OTOMATİK KARNE OLUŞTURUCU
-function karneKontrolEtVeOlustur(kadi) {
-    let mevcutNotlar = JSON.parse(localStorage.getItem('mikap_notlar')) || {};
+// BULUT DOĞRULAMA VE OTOMATİK OLUŞTURMA MOTORU
+async function bulutKullaniciGuvencesi(kadi) {
+    const userRef = db.collection("users").doc(kadi);
+    const doc = await userRef.get();
     
-    if (!mevcutNotlar[kadi]) {
-        const bosDers = { teori: "-", uygulama: "-", kanaat: "-", ort: "-", harf: "-" };
-        mevcutNotlar[kadi] = {
-            sahne: { ...bosDers }
-        };
-        localStorage.setItem('mikap_notlar', JSON.stringify(mevcutNotlar));
+    if (!doc.exists) {
+        const sablon = KULLANICILAR[kadi];
+        await userRef.set({
+            sifre: sablon.sifre,
+            rol: sablon.rol,
+            isim: sablon.isim
+        });
+        
+        if (sablon.rol === "student") {
+            await db.collection("grades").doc(kadi).set({
+                sahne: { teori: "-", uygulama: "-", kanaat: "-", ort: "-", harf: "-" }
+            });
+        }
+        return { sifre: sablon.sifre, rol: sablon.rol, isim: sablon.isim };
     }
+    return doc.data();
 }
 
-function sistemeGirisYap(secilenRol) {
+async function sistemeGirisYap(secilenRol) {
     const kadi = document.getElementById('username').value.trim();
     const sifre = document.getElementById('password').value;
     const hataKutusu = document.getElementById('error-box');
 
     if (KULLANICILAR[kadi]) {
-        // Özel şifre havuzundan kontrol sağlama
-        const ozelSifreler = JSON.parse(localStorage.getItem('mikap_ozel_sifreler')) || {};
-        const gecerliSifre = ozelSifreler[kadi] || KULLANICILAR[kadi].sifre;
+        try {
+            const bulutUser = await bulutKullaniciGuvencesi(kadi);
 
-        if (gecerliSifre === sifre) {
-            const user = KULLANICILAR[kadi];
-            
-            if (user.rol === secilenRol) {
-                hataKutusu.style.display = "none";
-                document.getElementById('login-form').style.display = "none";
-                
-                AKTIF_KULLANICI = kadi; // Aktif kullanıcıyı ata
-
-                if (user.rol === "student") {
-                    karneKontrolEtVeOlustur(kadi);
+            if (bulutUser.sifre === sifre) {
+                if (bulutUser.rol === secilenRol) {
+                    hataKutusu.style.display = "none";
+                    document.getElementById('login-form').style.display = "none";
                     
-                    document.getElementById('student-panel').style.display = "block";
-                    document.getElementById('student-name').innerText = user.isim;
-                    ogrenciNotlariniYansit(kadi);
-                } else if (user.rol === "teacher") {
-                    document.getElementById('teacher-panel').style.display = "block";
-                    document.getElementById('teacher-name').innerText = user.isim;
+                    AKTIF_KULLANICI = kadi;
 
-                    // OTOMATİK ÖĞRENCİ LİSTELEME
-                    const ogrenciSecimKutusu = document.getElementById('selected-student');
-                    ogrenciSecimKutusu.innerHTML = "";
-                    
-                    for (const username in KULLANICILAR) {
-                        if (KULLANICILAR[username].rol === "student") {
-                            const option = document.createElement('option');
-                            option.value = username;
-                            option.innerText = `${KULLANICILAR[username].isim} (Kursiyer)`;
-                            ogrenciSecimKutusu.appendChild(option);
+                    if (bulutUser.rol === "student") {
+                        document.getElementById('student-panel').style.display = "block";
+                        document.getElementById('student-name').innerText = bulutUser.isim;
+                        await ogrenciNotlariniYansit(kadi);
+                    } else if (bulutUser.rol === "teacher") {
+                        document.getElementById('teacher-panel').style.display = "block";
+                        document.getElementById('teacher-name').innerText = bulutUser.isim;
+
+                        const ogrenciSecimKutusu = document.getElementById('selected-student');
+                        ogrenciSecimKutusu.innerHTML = "";
+                        
+                        for (const username in KULLANICILAR) {
+                            if (KULLANICILAR[username].rol === "student") {
+                                const option = document.createElement('option');
+                                option.value = username;
+                                option.innerText = `${KULLANICILAR[username].isim} (Kursiyer)`;
+                                ogrenciSecimKutusu.appendChild(option);
+                            }
                         }
                     }
+                } else {
+                    const rolIsmi = secilenRol === 'teacher' ? 'Öğretici' : 'Öğrenci';
+                    hataKutusu.innerText = `Bu hesap ile ${rolIsmi} girişi yapamazsınız!`;
+                    hataKutusu.style.display = "block";
                 }
             } else {
-                const rolIsmi = secilenRol === 'teacher' ? 'Öğretici' : 'Öğrenci';
-                hataKutusu.innerText = `Bu hesap ile ${rolIsmi} girişi yapamazsınız!`;
+                hataKutusu.innerText = "Hatalı kullanıcı adı veya şifre!";
                 hataKutusu.style.display = "block";
             }
-        } else {
-            hataKutusu.innerText = "Hatalı kullanıcı adı veya şifre!";
+        } catch (error) {
+            console.error("Bulut hatası:", error);
+            hataKutusu.innerText = "Bağlantı hatası yaşandı!";
             hataKutusu.style.display = "block";
         }
     } else {
@@ -397,33 +410,40 @@ function sistemeGirisYap(secilenRol) {
     }
 }
 
-// ŞİFRE GÜNCELLEME MOTORU
-function sifreyiGuncelle(inputId, areaId) {
+async function sifreyiGuncelle(inputId, areaId) {
     const yeniSifre = document.getElementById(inputId).value.trim();
     if (yeniSifre.length < 4) {
         alert("Güvenliğiniz için şifre en az 4 karakterden oluşmalıdır!");
         return;
     }
-    let ozelSifreler = JSON.parse(localStorage.getItem('mikap_ozel_sifreler')) || {};
-    ozelSifreler[AKTIF_KULLANICI] = yeniSifre;
-    localStorage.setItem('mikap_ozel_sifreler', JSON.stringify(ozelSifreler));
     
-    alert("Şifreniz başarıyla güncellendi! Bir sonraki girişinizde yeni şifrenizi kullanabilirsiniz.");
-    document.getElementById(inputId).value = "";
-    document.getElementById(areaId).style.display = "none";
+    try {
+        await db.collection("users").doc(AKTIF_KULLANICI).update({ sifre: yeniSifre });
+        alert("Şifreniz bulut üzerinde başarıyla güncellendi ve kilitlendi!");
+        document.getElementById(inputId).value = "";
+        document.getElementById(areaId).style.display = "none";
+    } catch (e) {
+        alert("Şifre güncellenirken hata oluştu.");
+    }
 }
 
-function ogrenciNotlariniYansit(kadi) {
-    const notlar = JSON.parse(localStorage.getItem('mikap_notlar'))[kadi];
-    
-    document.getElementById('view-sahne-teori').innerText = notlar.sahne.teori;
-    document.getElementById('view-sahne-uygulama').innerText = notlar.sahne.uygulama;
-    document.getElementById('view-sahne-kanaat').innerText = notlar.sahne.kanaat;
-    document.getElementById('view-sahne-ort').innerText = notlar.sahne.ort;
-    document.getElementById('view-sahne-harf').innerText = notlar.sahne.harf;
+async function ogrenciNotlariniYansit(kadi) {
+    try {
+        const doc = await db.collection("grades").doc(kadi).get();
+        if (doc.exists) {
+            const notlar = doc.data();
+            document.getElementById('view-sahne-teori').innerText = notlar.sahne.teori;
+            document.getElementById('view-sahne-uygulama').innerText = notlar.sahne.uygulama;
+            document.getElementById('view-sahne-kanaat').innerText = notlar.sahne.kanaat;
+            document.getElementById('view-sahne-ort').innerText = notlar.sahne.ort;
+            document.getElementById('view-sahne-harf').innerText = notlar.sahne.harf;
+        }
+    } catch (e) {
+        console.error("Not yükleme hatası:", e);
+    }
 }
 
-function notlariKaydet() {
+async function notlariKaydet() {
     const secilenOgrenci = document.getElementById('selected-student').value;
     const secilenDers = document.getElementById('selected-lesson').value;
     
@@ -436,27 +456,24 @@ function notlariKaydet() {
         return;
     }
 
-    karneKontrolEtVeOlustur(secilenOgrenci);
+    await bulutKullaniciGuvencesi(secilenOgrenci);
 
     const ortalama = Math.round((t * 0.40) + (u * 0.40) + (k * 0.20));
     const harf = harfNotuHesapla(ortalama);
 
-    let mevcutNotlar = JSON.parse(localStorage.getItem('mikap_notlar'));
-    
-    mevcutNotlar[secilenOgrenci][secilenDers] = {
-        teori: t,
-        uygulama: u,
-        kanaat: k,
-        ort: ortalama,
-        harf: harf
-    };
-
-    localStorage.setItem('mikap_notlar', JSON.stringify(mevcutNotlar));
-    alert(`Notlar başarıyla hesaplandı!\nOrtalama: ${ortalama}\nDurum: ${harf}`);
-    
-    document.getElementById('grade-teori').value = "";
-    document.getElementById('grade-uygulama').value = "";
-    document.getElementById('grade-kanaat').value = "";
+    try {
+        const updateData = {};
+        updateData[secilenDers] = { teori: t, uygulama: u, kanaat: k, ort: ortalama, harf: harf };
+        
+        await db.collection("grades").doc(secilenOgrenci).set(updateData, { merge: true });
+        alert(`Notlar canlı buluta işlendi!\nOrtalama: ${ortalama}\nDurum: ${harf}`);
+        
+        document.getElementById('grade-teori').value = "";
+        document.getElementById('grade-uygulama').value = "";
+        document.getElementById('grade-kanaat').value = "";
+    } catch (e) {
+        alert("Not kaydedilirken bulut hatası oluştu.");
+    }
 }
 
 function cikisYap() {
