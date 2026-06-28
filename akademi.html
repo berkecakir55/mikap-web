@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <link rel="icon" type="image/png" href="logo.jpeg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mikap Akademi | E-Sahne Girişi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.2">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        .akademi-section {
+            padding: 80px 5% 120px;
+            min-height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+
+        .akademi-card {
+            background: #111;
+            border: 1px solid #222;
+            padding: 40px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 550px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .akademi-card h2 {
+            font-family: 'Playfair Display', serif;
+            color: #f1c40f;
+            margin-bottom: 25px;
+        }
+
+        /* Form Elemanları */
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            background: #050505;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            box-sizing: border-box;
+        }
+
+        .btn-login, .btn-save {
+            width: 100%;
+            padding: 14px;
+            background: #b30000;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-login:hover, .btn-save:hover { background: #ff0000; }
+
+        /* Panel Düzenleri */
+        .dashboard { display: none; text-align: left; }
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid #b30000;
+            color: #b30000;
+            padding: 6px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+        .logout-btn:hover { background: #b30000; color: #fff; }
+
+        /* Not Tablosu */
+        .grades-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .grades-table th, .grades-table td {
+            border: 1px solid #222;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .grades-table th { background: #050505; color: #f1c40f; }
+        .grades-table td { background: #161616; }
+
+        .error-msg { color: #ff1e56; font-size: 14px; margin-top: 15px; display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="logo.png" alt="Mikap Tiyatro Logo" class="nav-logo">
+                <span class="m-logo">MİKAP</span> <span>TİYATRO</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Anasayfa</a></li>
+                <li><a href="index.html#oyunlar">Oyunlar</a></li>
+                <li><a href="takvim.html">Takvim</a></li>
+                <li><a href="ekip.html">Ekibimiz</a></li>
+                <li><a href="misyon-vizyon.html">Vizyon Ve Misyonumuz</a></li>
+                <li><a href="akademi.html">Mikap Akademi</a></li>
+                <li><a href="iletisim.html">İletişim</a></li>
+            </ul>
+            <a href="https://biletinial.com/tr-tr/tiyatro/son-saat" class="btn-ticket-red">Hemen Bilet Al</a>
+        </nav>
+    </header>
+
+    <section class="page-header">
+        <div class="header-overlay">
+            <h1>Mikap Akademi</h1>
+            <p style="color: #ccc; letter-spacing: 2px; margin-top: 10px; font-weight: 300;">Kursiyer ve Eğitmen Yönetim Sistemi</p>
+        </div>
+    </section>
+
+    <section class="akademi-section">
+        <div class="akademi-card">
+            
+            <div id="login-form">
+                <h2>Akademi Girişi</h2>
+                <div class="input-group">
+                    <label>Kullanıcı Adı</label>
+                    <input type="text" id="username" placeholder="Kullanıcı adınızı girin">
+                </div>
+                <div class="input-group">
+                    <label>Şifre</label>
+                    <input type="password" id="password" placeholder="••••••••">
+                </div>
+                
+                <div class="login-actions" style="display: flex; gap: 15px; margin-top: 25px;">
+                    <button class="btn-login" style="background: #b30000; flex: 1;" onclick="sistemeGirisYap('teacher')">
+                        <i class="fas fa-chalkboard-teacher"></i> Öğretici Girişi
+                    </button>
+                    <button class="btn-login" style="background: #f1c40f; color: #000; flex: 1;" onclick="sistemeGirisYap('student')">
+                        <i class="fas fa-user-graduate"></i> Öğrenci Girişi
+                    </button>
+                </div>
+                
+                <div class="error-msg" id="error-box">Hatalı kullanıcı adı veya şifre!</div>
+            </div>
+
+            <div id="teacher-panel" class="dashboard">
+                <div class="user-info">
+                    <div><strong>Eğitmen:</strong> <span id="teacher-name"></span></div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="logout-btn" style="border-color: #f1c40f; color: #f1c40f;" onclick="document.getElementById('teacher-pw-area').style.display='block'">Şifre Değiştir</button>
+                        <button class="logout-btn" onclick="cikisYap()">Çıkış Yap</button>
+                    </div>
+                </div>
+
+                <div id="teacher-pw-area" style="display: none; background: #050505; padding: 15px; border-radius: 6px; border: 1px solid #333; margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 10px;">
+                        <label>Yeni Şifreniz</label>
+                        <input type="password" id="teacher-new-password" placeholder="Yeni şifrenizi girin">
+                    </div>
+                    <button class="btn-save" style="padding: 8px; font-size: 13px; width: auto;" onclick="sifreyiGuncelle('teacher-new-password', 'teacher-pw-area')">Şifreyi Güncelle</button>
+                </div>
+
+                <h3>Kursiyer Not Girişi</h3>
+                <br>
+                <div class="input-group">
+                    <label>Kursiyer Seçin</label>
+                    <select id="selected-student">
+                        </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Ders Seçin</label>
+                    <select id="selected-lesson">
+                        <option value="sahne">Mikap Tiyatro 1. Atölye</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Teori Notu</label>
+                        <input type="number" id="grade-teori" min="0" max="100" placeholder="0-100">
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label>Uygulama Notu</label>
+                        <input type="number" id="grade-uygulama" min="0" max="100" placeholder="0-100">
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label>Kanaat Notu</label>
+                        <input type="number" id="grade-kanaat" min="0" max="100" placeholder="0-100">
+                    </div>
+                </div>
+                
+                <button class="btn-save" onclick="notlariKaydet()">Notları Hesapla ve Sisteme İşle</button>
+            </div>
+
+            <div id="student-panel" class="dashboard">
+                <div class="user-info">
+                    <div><strong>Kursiyer:</strong> <span id="student-name"></span></div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="logout-btn" style="border-color: #f1c40f; color: #f1c40f;" onclick="document.getElementById('student-pw-area').style.display='block'">Şifre Değiştir</button>
+                        <button class="logout-btn" onclick="cikisYap()">Çıkış Yap</button>
+                    </div>
+                </div>
+
+                <div id="student-pw-area" style="display: none; background: #050505; padding: 15px; border-radius: 6px; border: 1px solid #333; margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 10px;">
+                        <label>Yeni Şifreniz</label>
+                        <input type="password" id="student-new-password" placeholder="Yeni şifrenizi girin">
+                    </div>
+                    <button class="btn-save" style="padding: 8px; font-size: 13px; width: auto;" onclick="sifreyiGuncelle('student-new-password', 'student-pw-area')">Şifreyi Güncelle</button>
+                </div>
+
+                <h3>Akademik Durum Raporu</h3>
+                <p style="font-size: 12px; color: #888; margin-bottom: 15px;">* Bu alandaki veriler salt okunurdur, değişiklik yapılamaz.</p>
+                
+                <div style="overflow-x: auto;">
+                    <table class="grades-table">
+                        <thead>
+                            <tr>
+                                <th>Ders Adı</th>
+                                <th>Teori</th>
+                                <th>Uygulama</th>
+                                <th>Kanaat</th>
+                                <th>Ortalama</th>
+                                <th>Harf Notu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Mikap Tiyatro 1. Atölye</td>
+                                <td id="view-sahne-teori">-</td>
+                                <td id="view-sahne-uygulama">-</td>
+                                <td id="view-sahne-kanaat">-</td>
+                                <td id="view-sahne-ort" style="font-weight: bold; color: #f1c40f;">-</td>
+                                <td id="view-sahne-harf" style="font-weight: bold; color: #ff1e56;">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <h2 class="footer-logo">MİKAP TİYATRO</h2>
+            <p class="footer-location">Atakum, Samsun</p>
+            <p class="footer-contact">Gişe: 0541 140 5517</p>
+            <div class="social-icons">
+                <a href="https://instagram.com/mikaptiyatro"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=61563645158672&locale=tr_TR"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.youtube.com/channel/UChvmHVL0fiUs_D_U11OLJiw"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Mikap Tiyatro. Tüm Hakları Saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+// =================================================================
+// MİKAP AKADEMİ KULLANICI LİSTESİ
+// =================================================================
+const KULLANICILAR = {
+    "metintahakaya": { sifre: "Mtk.Mikap2026!", rol: "teacher", isim: "Metin Taha Kaya" },
+    "berkecakir": { sifre: "Mikap_Bc99!", rol: "student", isim: "Berke Çakır" },
+    "koz": { sifre: "Zerey_Koz26#", rol: "student", isim: "Kürşat Oğuzhan Zerey" },
+    "ahmetgumus": { sifre: "A_Gumus2026!", rol: "student", isim: "Ahmet Gümüş" },
+    "aysegulzerey": { sifre: "5373548337Az.", rol: "student", isim: "Ayşegül Zerey" },
+    "cerenilgir": { sifre: "Ceren.Ilgir!55", rol: "student", isim: "Ceren Ilgır" },
+    "eylulgulcicek": { sifre: "55#EylulGulcicek", rol: "student", isim: "Eylel Gülçiçek" },
+    "furkanalialgan": { sifre: "Faa.Algan2026!", rol: "student", isim: "Furkan Ali Algan" },
+    "muhammedmertkaya": { sifre: "Latissimus5!", rol: "student", isim: "Muhammed Mert Kaya" },
+    "murveryigit": { sifre: "mur123", rol: "student", isim: "Mürvet" },
+    "niluferguzel": { sifre: "Nilufer*Guzel99", rol: "student", isim: "Nilüfer Güzel" },
+    "furkanfatihkaratas": { sifre: "Furk@n.Krt55", rol: "student", isim: "Furkan Fatih Karataş" },
+    "mehmetbahadirunal": { sifre: "Mhmt+Unl55", rol: "student", isim: "Mehmet Bahadır Ünal" }
+};
+
+let AKTIF_KULLANICI = "";
+
+// Hafıza kontrol havuzları
+if (!localStorage.getItem('mikap_notlar')) {
+    localStorage.setItem('mikap_notlar', JSON.stringify({}));
+}
+if (!localStorage.getItem('mikap_ozel_sifreler')) {
+    localStorage.setItem('mikap_ozel_sifreler', JSON.stringify({}));
+}
+
+// 70 Barajına Göre Otomatik Harf Belirleme Fonksiyonu
+function harfNotuHesapla(ort) {
+    if (ort === "-" || isNaN(ort)) return "-";
+    if (ort < 70) return "FF (Kaldı)";
+    if (ort >= 90) return "AA (Mükemmel - Geçti)";
+    if (ort >= 85) return "BA (Çok İyi - Geçti)";
+    if (ort >= 80) return "BB (İyi - Geçti)";
+    if (ort >= 75) return "CB (Orta Üstü - Geçti)";
+    return "CC (Orta - Geçti)";
+}
+
+// AKILLI OTOMATİK KARNE OLUŞTURUCU
+function karneKontrolEtVeOlustur(kadi) {
+    let mevcutNotlar = JSON.parse(localStorage.getItem('mikap_notlar')) || {};
+    
+    if (!mevcutNotlar[kadi]) {
+        const bosDers = { teori: "-", uygulama: "-", kanaat: "-", ort: "-", harf: "-" };
+        mevcutNotlar[kadi] = {
+            sahne: { ...bosDers }
+        };
+        localStorage.setItem('mikap_notlar', JSON.stringify(mevcutNotlar));
+    }
+}
+
+function sistemeGirisYap(secilenRol) {
+    const kadi = document.getElementById('username').value.trim();
+    const sifre = document.getElementById('password').value;
+    const hataKutusu = document.getElementById('error-box');
+
+    if (KULLANICILAR[kadi]) {
+        // Özel şifre havuzundan kontrol sağlama
+        const ozelSifreler = JSON.parse(localStorage.getItem('mikap_ozel_sifreler')) || {};
+        const gecerliSifre = ozelSifreler[kadi] || KULLANICILAR[kadi].sifre;
+
+        if (gecerliSifre === sifre) {
+            const user = KULLANICILAR[kadi];
+            
+            if (user.rol === secilenRol) {
+                hataKutusu.style.display = "none";
+                document.getElementById('login-form').style.display = "none";
+                
+                AKTIF_KULLANICI = kadi; // Aktif kullanıcıyı ata
+
+                if (user.rol === "student") {
+                    karneKontrolEtVeOlustur(kadi);
+                    
+                    document.getElementById('student-panel').style.display = "block";
+                    document.getElementById('student-name').innerText = user.isim;
+                    ogrenciNotlariniYansit(kadi);
+                } else if (user.rol === "teacher") {
+                    document.getElementById('teacher-panel').style.display = "block";
+                    document.getElementById('teacher-name').innerText = user.isim;
+
+                    // OTOMATİK ÖĞRENCİ LİSTELEME
+                    const ogrenciSecimKutusu = document.getElementById('selected-student');
+                    ogrenciSecimKutusu.innerHTML = "";
+                    
+                    for (const username in KULLANICILAR) {
+                        if (KULLANICILAR[username].rol === "student") {
+                            const option = document.createElement('option');
+                            option.value = username;
+                            option.innerText = `${KULLANICILAR[username].isim} (Kursiyer)`;
+                            ogrenciSecimKutusu.appendChild(option);
+                        }
+                    }
+                }
+            } else {
+                const rolIsmi = secilenRol === 'teacher' ? 'Öğretici' : 'Öğrenci';
+                hataKutusu.innerText = `Bu hesap ile ${rolIsmi} girişi yapamazsınız!`;
+                hataKutusu.style.display = "block";
+            }
+        } else {
+            hataKutusu.innerText = "Hatalı kullanıcı adı veya şifre!";
+            hataKutusu.style.display = "block";
+        }
+    } else {
+        hataKutusu.innerText = "Hatalı kullanıcı adı veya şifre!";
+        hataKutusu.style.display = "block";
+    }
+}
+
+// ŞİFRE GÜNCELLEME MOTORU
+function sifreyiGuncelle(inputId, areaId) {
+    const yeniSifre = document.getElementById(inputId).value.trim();
+    if (yeniSifre.length < 4) {
+        alert("Güvenliğiniz için şifre en az 4 karakterden oluşmalıdır!");
+        return;
+    }
+    let ozelSifreler = JSON.parse(localStorage.getItem('mikap_ozel_sifreler')) || {};
+    ozelSifreler[AKTIF_KULLANICI] = yeniSifre;
+    localStorage.setItem('mikap_ozel_sifreler', JSON.stringify(ozelSifreler));
+    
+    alert("Şifreniz başarıyla güncellendi! Bir sonraki girişinizde yeni şifrenizi kullanabilirsiniz.");
+    document.getElementById(inputId).value = "";
+    document.getElementById(areaId).style.display = "none";
+}
+
+function ogrenciNotlariniYansit(kadi) {
+    const notlar = JSON.parse(localStorage.getItem('mikap_notlar'))[kadi];
+    
+    document.getElementById('view-sahne-teori').innerText = notlar.sahne.teori;
+    document.getElementById('view-sahne-uygulama').innerText = notlar.sahne.uygulama;
+    document.getElementById('view-sahne-kanaat').innerText = notlar.sahne.kanaat;
+    document.getElementById('view-sahne-ort').innerText = notlar.sahne.ort;
+    document.getElementById('view-sahne-harf').innerText = notlar.sahne.harf;
+}
+
+function notlariKaydet() {
+    const secilenOgrenci = document.getElementById('selected-student').value;
+    const secilenDers = document.getElementById('selected-lesson').value;
+    
+    const t = parseFloat(document.getElementById('grade-teori').value);
+    const u = parseFloat(document.getElementById('grade-uygulama').value);
+    const k = parseFloat(document.getElementById('grade-kanaat').value);
+
+    if (isNaN(t) || isNaN(u) || isNaN(k)) {
+        alert("Lütfen Teori, Uygulama ve Kanaat notlarının hepsini giriniz!");
+        return;
+    }
+
+    karneKontrolEtVeOlustur(secilenOgrenci);
+
+    const ortalama = Math.round((t * 0.40) + (u * 0.40) + (k * 0.20));
+    const harf = harfNotuHesapla(ortalama);
+
+    let mevcutNotlar = JSON.parse(localStorage.getItem('mikap_notlar'));
+    
+    mevcutNotlar[secilenOgrenci][secilenDers] = {
+        teori: t,
+        uygulama: u,
+        kanaat: k,
+        ort: ortalama,
+        harf: harf
+    };
+
+    localStorage.setItem('mikap_notlar', JSON.stringify(mevcutNotlar));
+    alert(`Notlar başarıyla hesaplandı!\nOrtalama: ${ortalama}\nDurum: ${harf}`);
+    
+    document.getElementById('grade-teori').value = "";
+    document.getElementById('grade-uygulama').value = "";
+    document.getElementById('grade-kanaat').value = "";
+}
+
+function cikisYap() {
+    AKTIF_KULLANICI = "";
+    document.getElementById('teacher-panel').style.display = "none";
+    document.getElementById('student-panel').style.display = "none";
+    document.getElementById('login-form').style.display = "block";
+    document.getElementById('username').value = "";
+    document.getElementById('password').value = "";
+}
+    </script>
+</body>
+</html>
