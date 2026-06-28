@@ -29,6 +29,7 @@
             max-width: 550px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: max-width 0.4s ease; /* Genişleme efekti */
         }
 
         .akademi-card h2 {
@@ -145,6 +146,7 @@
     <section class="akademi-section">
         <div class="akademi-card">
             
+            <!-- 1. GİRİŞ FORMU -->
             <div id="login-form">
                 <h2>Akademi Girişi</h2>
                 <div class="input-group">
@@ -168,6 +170,7 @@
                 <div class="error-msg" id="error-box">Hatalı kullanıcı adı veya şifre!</div>
             </div>
 
+            <!-- 2. ÖĞRETİCİ (EĞİTMEN) PANELİ -->
             <div id="teacher-panel" class="dashboard">
                 <div class="user-info">
                     <div><strong>Eğitmen:</strong> <span id="teacher-name"></span></div>
@@ -185,39 +188,31 @@
                     <button class="btn-save" style="padding: 8px; font-size: 13px; width: auto;" onclick="sifreyiGuncelle('teacher-new-password', 'teacher-pw-area')">Şifreyi Güncelle</button>
                 </div>
 
-                <h3>Kursiyer Not Girişi</h3>
-                <br>
-                <div class="input-group">
-                    <label>Kursiyer Seçin</label>
-                    <select id="selected-student">
-                        </select>
-                </div>
+                <h3>Kursiyer Akademik Not Çizelgesi</h3>
+                <p style="font-size: 12px; color: #888; margin-bottom: 15px;">* Değerleri değiştirdiğinizde ortalamalar anlık hesaplanır. Kaydetmek için satır sonundaki butona basınız.</p>
                 
-                <div class="input-group">
-                    <label>Ders Seçin</label>
-                    <select id="selected-lesson">
-                        <option value="sahne">Mikap Tiyatro 1. Atölye</option>
-                    </select>
+                <!-- TOPLU NOT LİSTELEME TABLOSU -->
+                <div style="overflow-x: auto;">
+                    <table class="grades-table">
+                        <thead>
+                            <tr>
+                                <th>Kursiyer Adı</th>
+                                <th>Teori (%40)</th>
+                                <th>Uygulama (%40)</th>
+                                <th>Kanaat (%20)</th>
+                                <th>Ortalama</th>
+                                <th>Harf Notu</th>
+                                <th>Eylem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacher-grades-body">
+                            <!-- JavaScript Buluttan Çekip Dolduracak -->
+                        </tbody>
+                    </table>
                 </div>
-
-                <div style="display: flex; gap: 10px;">
-                    <div class="input-group" style="flex: 1;">
-                        <label>Teori Notu</label>
-                        <input type="number" id="grade-teori" min="0" max="100" placeholder="0-100">
-                    </div>
-                    <div class="input-group" style="flex: 1;">
-                        <label>Uygulama Notu</label>
-                        <input type="number" id="grade-uygulama" min="0" max="100" placeholder="0-100">
-                    </div>
-                    <div class="input-group" style="flex: 1;">
-                        <label>Kanaat Notu</label>
-                        <input type="number" id="grade-kanaat" min="0" max="100" placeholder="0-100">
-                    </div>
-                </div>
-                
-                <button class="btn-save" onclick="notlariKaydet()">Notları Hesapla ve Sisteme İşle</button>
             </div>
 
+            <!-- 3. ÖĞRENCİ (KURSİYER) PANELİ -->
             <div id="student-panel" class="dashboard">
                 <div class="user-info">
                     <div><strong>Kursiyer:</strong> <span id="student-name"></span></div>
@@ -283,13 +278,11 @@
         </div>
     </footer>
 
+    <!-- FIREBASE KÜTÜPHANELERİ -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
     <script>
-// =================================================================
-// EKRAN GÖRÜNTÜNDEKİ SANA ÖZEL CANLI BULUT ANAHTARLARI ENTEGRE EDİLDİ
-// =================================================================
 const firebaseConfig = {
     apiKey: "AIzaSyBoa1ULmRy8pfGrsxQV3jGrmHkBIWdi11w",
     authDomain: "mikap-akademi.firebaseapp.com",
@@ -299,7 +292,6 @@ const firebaseConfig = {
     appId: "1:197387541642:web:c23a4c0b8b6e959ee2a173"
 };
 
-// Firebase Bağlantısını Başlat
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
@@ -324,14 +316,13 @@ let AKTIF_KULLANICI = "";
 function harfNotuHesapla(ort) {
     if (ort === "-" || isNaN(ort)) return "-";
     if (ort < 70) return "FF (Kaldı)";
-    if (ort >= 90) return "AA (Mükemmel - Geçti)";
-    if (ort >= 85) return "BA (Çok İyi - Geçti)";
-    if (ort >= 80) return "BB (İyi - Geçti)";
-    if (ort >= 75) return "CB (Orta Üstü - Geçti)";
-    return "CC (Orta - Geçti)";
+    if (ort >= 90) return "AA (Mükemmel)";
+    if (ort >= 85) return "BA (Çok İyi)";
+    if (ort >= 80) return "BB (İyi)";
+    if (ort >= 75) return "CB (Orta Üstü)";
+    return "CC (Orta)";
 }
 
-// BULUT DOĞRULAMA VE OTOMATİK OLUŞTURMA MOTORU
 async function bulutKullaniciGuvencesi(kadi) {
     const userRef = db.collection("users").doc(kadi);
     const doc = await userRef.get();
@@ -371,24 +362,16 @@ async function sistemeGirisYap(secilenRol) {
                     AKTIF_KULLANICI = kadi;
 
                     if (bulutUser.rol === "student") {
+                        document.querySelector('.akademi-card').style.maxWidth = '550px';
                         document.getElementById('student-panel').style.display = "block";
                         document.getElementById('student-name').innerText = bulutUser.isim;
                         await ogrenciNotlariniYansit(kadi);
                     } else if (bulutUser.rol === "teacher") {
+                        // Eğitmen girince tablo rahat sığsın diye kart genişliğini 950px yapıyoruz
+                        document.querySelector('.akademi-card').style.maxWidth = '950px';
                         document.getElementById('teacher-panel').style.display = "block";
                         document.getElementById('teacher-name').innerText = bulutUser.isim;
-
-                        const ogrenciSecimKutusu = document.getElementById('selected-student');
-                        ogrenciSecimKutusu.innerHTML = "";
-                        
-                        for (const username in KULLANICILAR) {
-                            if (KULLANICILAR[username].rol === "student") {
-                                const option = document.createElement('option');
-                                option.value = username;
-                                option.innerText = `${KULLANICILAR[username].isim} (Kursiyer)`;
-                                ogrenciSecimKutusu.appendChild(option);
-                            }
-                        }
+                        await ogreticiTablosunuYukle();
                     }
                 } else {
                     const rolIsmi = secilenRol === 'teacher' ? 'Öğretici' : 'Öğrenci';
@@ -407,6 +390,115 @@ async function sistemeGirisYap(secilenRol) {
     } else {
         hataKutusu.innerText = "Hatalı kullanıcı adı veya şifre!";
         hataKutusu.style.display = "block";
+    }
+}
+
+// 👑 BULUTTAN TÜM ÖĞRENCİLERİ VE NOTLARINI TEK SEFERDE TOPLU YÜKLEME MOTORU
+async function ogreticiTablosunuYukle() {
+    const tbody = document.getElementById('teacher-grades-body');
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#aaa; padding:20px;">Bulut veritabanı yükleniyor...</td></tr>';
+    
+    try {
+        const querySnapshot = await db.collection("grades").get();
+        const tumNotlar = {};
+        querySnapshot.forEach((doc) => {
+            tumNotlar[doc.id] = doc.data();
+        });
+        
+        tbody.innerHTML = ""; 
+        
+        for (const username in KULLANICILAR) {
+            if (KULLANICILAR[username].rol === "student") {
+                const ogrenciIsmi = KULLANICILAR[username].isim;
+                
+                let teori = "", uygulama = "", kanaat = "", ort = "-", harf = "-";
+                if (tumNotlar[username] && tumNotlar[username].sahne) {
+                    const n = tumNotlar[username].sahne;
+                    teori = n.teori !== "-" ? n.teori : "";
+                    uygulama = n.uygulama !== "-" ? n.uygulama : "";
+                    kanaat = n.kanaat !== "-" ? n.kanaat : "";
+                    ort = n.ort;
+                    harf = n.harf;
+                }
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight:600; color:#fff;">${ogrenciIsmi}</td>
+                    <td><input type="number" id="t-${username}" min="0" max="100" value="${teori}" style="width:70px; padding:6px; background:#050505; border:1px solid #333; color:#fff; border-radius:4px; text-align:center;" oninput="tabloNotHesapla('${username}')"></td>
+                    <td><input type="number" id="u-${username}" min="0" max="100" value="${uygulama}" style="width:70px; padding:6px; background:#050505; border:1px solid #333; color:#fff; border-radius:4px; text-align:center;" oninput="tabloNotHesapla('${username}')"></td>
+                    <td><input type="number" id="k-${username}" min="0" max="100" value="${kanaat}" style="width:70px; padding:6px; background:#050505; border:1px solid #333; color:#fff; border-radius:4px; text-align:center;" oninput="tabloNotHesapla('${username}')"></td>
+                    <td id="ort-${username}" style="font-weight:bold; color:#f1c40f; text-align:center; font-size:16px;">${ort}</td>
+                    <td id="harf-${username}" style="font-weight:bold; color:#ff1e56; font-size:13px; text-align:center;">${harf}</td>
+                    <td><button class="logout-btn" style="border-color:#f1c40f; color:#f1c40f; padding:5px 12px; font-weight:600; font-size:11px;" onclick="tabloNotKaydet('${username}')"><i class="fas fa-save"></i> Kaydet</button></td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+    } catch (error) {
+        console.error("Tablo yükleme hatası:", error);
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#ff1e56; padding:20px;">Veriler yüklenirken bulut hatası oluştu!</td></tr>';
+    }
+}
+
+// ⚡ HOCA NOT DEĞİŞTİRDİĞİ AN ANLIK OLARAK SATIRDA HESAPLAMA YAPAN FONKSİYON
+function tabloNotHesapla(username) {
+    const tVal = document.getElementById(`t-${username}`).value;
+    const uVal = document.getElementById(`u-${username}`).value;
+    const kVal = document.getElementById(`k-${username}`).value;
+    
+    const t = parseFloat(tVal);
+    const u = parseFloat(uVal);
+    const k = parseFloat(kVal);
+    
+    const ortEl = document.getElementById(`ort-${username}`);
+    const harfEl = document.getElementById(`harf-${username}`);
+    
+    if (isNaN(t) || isNaN(u) || isNaN(k)) {
+        ortEl.innerText = "-";
+        harfEl.innerText = "-";
+        return;
+    }
+    
+    const ortalama = Math.round((t * 0.40) + (u * 0.40) + (k * 0.20));
+    ortEl.innerText = ortalama;
+    harfEl.innerText = harfNotuHesapla(ortalama);
+}
+
+// 💾 SATIR SONUNDAKİ KAYDET'E BASILDIĞINDA TEK BİR ÖĞRENCİYİ BULUTA İŞLEYEN MOTOR
+async function tabloNotKaydet(username) {
+    const tVal = document.getElementById(`t-${username}`).value;
+    const uVal = document.getElementById(`u-${username}`).value;
+    const kVal = document.getElementById(`k-${username}`).value;
+    
+    const t = parseFloat(tVal);
+    const u = parseFloat(uVal);
+    const k = parseFloat(kVal);
+    
+    if (isNaN(t) || isNaN(u) || isNaN(k)) {
+        alert("Lütfen Teori, Uygulama ve Kanaat notlarının tamamını giriniz!");
+        return;
+    }
+    
+    if (t < 0 || t > 100 || u < 0 || u > 100 || k < 0 || k > 100) {
+        alert("Notlar 0 ile 100 arasında olmalıdır!");
+        return;
+    }
+    
+    try {
+        await bulutKullaniciGuvencesi(username);
+        
+        const ortalama = Math.round((t * 0.40) + (u * 0.40) + (k * 0.20));
+        const harf = harfNotuHesapla(ortalama);
+        
+        const updateData = {
+            sahne: { teori: t, uygulama: u, kanaat: k, ort: ortalama, harf: harf }
+        };
+        
+        await db.collection("grades").doc(username).set(updateData, { merge: true });
+        alert(`${KULLANICILAR[username].isim} isimli kursiyerin notları buluta başarıyla kaydedildi!`);
+    } catch (e) {
+        console.error("Kaydetme hatası:", e);
+        alert("Not kaydedilirken bir bulut hatası meydana geldi!");
     }
 }
 
@@ -443,41 +535,9 @@ async function ogrenciNotlariniYansit(kadi) {
     }
 }
 
-async function notlariKaydet() {
-    const secilenOgrenci = document.getElementById('selected-student').value;
-    const secilenDers = document.getElementById('selected-lesson').value;
-    
-    const t = parseFloat(document.getElementById('grade-teori').value);
-    const u = parseFloat(document.getElementById('grade-uygulama').value);
-    const k = parseFloat(document.getElementById('grade-kanaat').value);
-
-    if (isNaN(t) || isNaN(u) || isNaN(k)) {
-        alert("Lütfen Teori, Uygulama ve Kanaat notlarının hepsini giriniz!");
-        return;
-    }
-
-    await bulutKullaniciGuvencesi(secilenOgrenci);
-
-    const ortalama = Math.round((t * 0.40) + (u * 0.40) + (k * 0.20));
-    const harf = harfNotuHesapla(ortalama);
-
-    try {
-        const updateData = {};
-        updateData[secilenDers] = { teori: t, uygulama: u, kanaat: k, ort: ortalama, harf: harf };
-        
-        await db.collection("grades").doc(secilenOgrenci).set(updateData, { merge: true });
-        alert(`Notlar canlı buluta işlendi!\nOrtalama: ${ortalama}\nDurum: ${harf}`);
-        
-        document.getElementById('grade-teori').value = "";
-        document.getElementById('grade-uygulama').value = "";
-        document.getElementById('grade-kanaat').value = "";
-    } catch (e) {
-        alert("Not kaydedilirken bulut hatası oluştu.");
-    }
-}
-
 function cikisYap() {
     AKTIF_KULLANICI = "";
+    document.querySelector('.akademi-card').style.maxWidth = '550px'; // Çıkışta kartı eski boyutuna çek
     document.getElementById('teacher-panel').style.display = "none";
     document.getElementById('student-panel').style.display = "none";
     document.getElementById('login-form').style.display = "block";
